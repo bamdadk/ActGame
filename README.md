@@ -53,7 +53,7 @@ stitch_medical_study_path/
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/<your-username>/stitch_medical_study_path.git
+git clone https://github.com/<your-username>/ActGame_medical_study_path.git
 cd stitch_medical_study_path
 ```
 
