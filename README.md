@@ -1,4 +1,4 @@
-# Stitch Medical Study Path
+# ActGame Medical Study Path
 
 An AI-powered, interactive medical case-study platform that turns any patient case report PDF into a structured clinical briefing and a 10-question multiple-choice quiz — scored in real time.
 
