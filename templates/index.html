@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Med-Arena — Initialize Mission</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700;900&family=Inter:wght@400;500;600&family=Lexend:wght@400;600;700&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary-container":    "#00f0ff",
+                        "secondary-container":  "#36ff8b",
+                        "surface-container":    "#1b1f2c",
+                        "surface-container-high": "#262a37",
+                        "outline-variant":      "#3b494b",
+                        "primary-fixed":        "#7df4ff",
+                        "background":           "#0f131f",
+                        "on-background":        "#dfe2f3",
+                        "on-surface":           "#dfe2f3",
+                        "on-primary-container": "#006970",
+                        "on-surface-variant":   "#b9cacb",
+                        "error":                "#ffb4ab",
+                    },
+                    fontFamily: {
+                        "h1":         ["Space Grotesk"],
+                        "h2":         ["Space Grotesk"],
+                        "h3":         ["Space Grotesk"],
+                        "label-caps": ["Lexend"],
+                        "body-lg":    ["Inter"],
+                        "body-md":    ["Inter"],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .material-symbols-outlined { font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24; }
+
+        /* Drop-zone */
+        .drop-zone { transition: all .3s ease; }
+        .drop-zone.dragover {
+            background: rgba(0,240,255,.08);
+            border-color: #00f0ff;
+            box-shadow: 0 0 24px rgba(0,240,255,.25);
+        }
+
+        /* Provider pill tabs */
+        .provider-tab { transition: all .2s ease; }
+        .provider-tab.active {
+            background: rgba(0,240,255,.12);
+            border-color: rgba(0,240,255,.5);
+            color: #7df4ff;
+        }
+        .provider-tab:not(.active) {
+            background: transparent;
+            border-color: rgba(59,73,75,.5);
+            color: #b9cacb;
+        }
+
+        /* Password input reveal animation */
+        .key-field { transition: border-color .2s; }
+        .key-field:focus { border-color: rgba(0,240,255,.5); box-shadow: 0 0 0 2px rgba(0,240,255,.1); outline: none; }
+
+        /* Loading spinner */
+        @keyframes spin { to { transform:rotate(360deg); } }
+        .spinner { animation: spin .8s linear infinite; }
+
+        /* Processing overlay */
+        #processing-overlay {
+            display: none;
+            position: fixed; inset: 0; z-index: 50;
+            background: rgba(15,19,31,.85);
+            backdrop-filter: blur(8px);
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 1.5rem;
+        }
+        #processing-overlay.visible { display: flex; }
+
+        /* Neon pulse ring */
+        @keyframes pulse-ring {
+            0%   { box-shadow: 0 0 0 0 rgba(0,240,255,.5); }
+            70%  { box-shadow: 0 0 0 20px rgba(0,240,255,0); }
+            100% { box-shadow: 0 0 0 0 rgba(0,240,255,0); }
+        }
+        .pulse-ring { animation: pulse-ring 1.4s ease infinite; }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen flex flex-col overflow-x-hidden">
+
+<!-- ── Processing Overlay ── -->
+<div id="processing-overlay">
+    <div class="w-20 h-20 rounded-full border-2 border-primary-container/30 flex items-center justify-center pulse-ring">
+        <svg class="spinner w-10 h-10 text-primary-container" fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="3"/>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"/>
+        </svg>
+    </div>
+    <p class="font-label-caps text-[14px] tracking-widest text-primary-fixed">ANALYZING CASE REPORT…</p>
+    <p class="text-on-surface-variant text-sm max-w-xs text-center">The AI is reading your PDF and generating 10 clinical questions. This may take 15–30 seconds.</p>
+</div>
+
+<main class="flex-1 relative w-full min-h-screen flex items-center justify-center p-4 py-10 overflow-y-auto">
+
+    <!-- Background glows -->
+    <div class="fixed inset-0 pointer-events-none z-0">
+        <div class="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-primary-container/5 rounded-full blur-[120px]"></div>
+        <div class="absolute bottom-1/4 right-1/4 w-[400px] h-[400px] bg-secondary-container/5 rounded-full blur-[100px]"></div>
+        <div class="absolute inset-0 bg-[linear-gradient(to_right,#31344210_1px,transparent_1px),linear-gradient(to_bottom,#31344210_1px,transparent_1px)] bg-[size:4rem_4rem]"></div>
+    </div>
+
+    <div class="relative z-10 w-full max-w-2xl mx-auto flex flex-col gap-6">
+
+        <!-- API Error Banner -->
+        {% if request.args.get('error') == 'api' %}
+        <div id="api-error-banner" class="flex items-start gap-3 bg-error/10 border border-error/30 rounded-xl px-5 py-4 text-error">
+            <span class="material-symbols-outlined text-[20px] mt-0.5 shrink-0" style="font-variation-settings:'FILL' 1;">error</span>
+            <div class="flex-1">
+                <p class="font-semibold text-[14px] mb-0.5">API Key Rejected (401)</p>
+                <p class="text-[13px] text-error/80">Your API key was not accepted by the provider. Please double-check that it is correct, active, and has billing enabled on your account.</p>
+            </div>
+            <button onclick="document.getElementById('api-error-banner').remove()" class="text-error/60 hover:text-error transition-colors shrink-0">
+                <span class="material-symbols-outlined text-[18px]">close</span>
+            </button>
+        </div>
+        {% endif %}
+
+        <!-- Header -->
+        <div class="text-center">
+            <div class="flex items-center justify-center gap-2 mb-2 text-primary-fixed font-label-caps text-[13px] tracking-widest">
+                <span class="material-symbols-outlined text-[16px]">smart_toy</span>
+                SYSTEM INITIALIZATION
+            </div>
+            <h1 class="font-h1 text-[44px] font-bold text-on-background uppercase tracking-tight drop-shadow-[0_0_18px_rgba(0,240,255,.2)] leading-none">
+                Med-Arena
+            </h1>
+            <p class="text-on-surface-variant mt-2 font-body-lg text-[16px]">Upload a patient case report PDF and let AI generate a 10-question clinical quiz.</p>
+        </div>
+
+        <!-- Card -->
+        <form id="upload-form" action="/upload" method="POST" enctype="multipart/form-data"
+              class="bg-surface-container/60 backdrop-blur-xl border border-outline-variant/30 rounded-2xl p-8 shadow-2xl relative overflow-hidden flex flex-col gap-6">
+
+            <!-- Corner accents -->
+            <div class="absolute top-0 left-0 w-5 h-5 border-t-2 border-l-2 border-primary-container/40 rounded-tl-2xl pointer-events-none"></div>
+            <div class="absolute top-0 right-0 w-5 h-5 border-t-2 border-r-2 border-primary-container/40 rounded-tr-2xl pointer-events-none"></div>
+
+            <!-- ── Step 1: AI Provider ── -->
+            <div>
+                <label class="flex items-center gap-2 font-label-caps text-[12px] text-on-surface-variant tracking-widest mb-3">
+                    <span class="material-symbols-outlined text-[16px]">hub</span>
+                    STEP 1 — SELECT AI PROVIDER
+                </label>
+
+                <div class="grid grid-cols-2 gap-3">
+                    <button type="button" id="tab-openai"
+                            class="provider-tab active border rounded-xl px-4 py-3 flex flex-col items-center gap-1"
+                            onclick="selectProvider('openai')">
+                        <span class="font-h3 text-[15px] font-semibold">OpenAI</span>
+                        <span class="text-[11px] opacity-70">GPT-4o-mini</span>
+                    </button>
+                    <button type="button" id="tab-gemini"
+                            class="provider-tab border rounded-xl px-4 py-3 flex flex-col items-center gap-1"
+                            onclick="selectProvider('gemini')">
+                        <span class="font-h3 text-[15px] font-semibold">Google Gemini</span>
+                        <span class="text-[11px] opacity-70">gemini-2.5-flash</span>
+                    </button>
+                </div>
+                <input type="hidden" name="provider" id="provider-input" value="openai">
+            </div>
+
+            <!-- ── Step 2: API Key ── -->
+            <div>
+                <label for="api-key-input" class="flex items-center gap-2 font-label-caps text-[12px] text-on-surface-variant tracking-widest mb-3">
+                    <span class="material-symbols-outlined text-[16px]">key</span>
+                    STEP 2 — ENTER YOUR API KEY
+                </label>
+
+                <div class="relative">
+                    <input type="password" id="api-key-input" name="api_key"
+                           placeholder="Paste your API key here…"
+                           class="key-field w-full bg-surface-container-high/80 border border-outline-variant/50 rounded-xl px-4 py-3 pr-12 text-on-surface placeholder-on-surface-variant/40 font-body-md text-[15px]"
+                           autocomplete="off" onchange="checkReady()" oninput="checkReady()">
+                    <!-- Toggle visibility -->
+                    <button type="button" onclick="toggleKey()"
+                            class="absolute right-3 top-1/2 -translate-y-1/2 text-on-surface-variant hover:text-primary-fixed transition-colors">
+                        <span class="material-symbols-outlined text-[20px]" id="key-eye-icon">visibility</span>
+                    </button>
+                </div>
+
+                <div id="key-hint" class="mt-2 text-[12px] text-on-surface-variant/60 flex items-start gap-1">
+                    <span class="material-symbols-outlined text-[14px] mt-0.5">info</span>
+                    <span id="key-hint-text">OpenAI keys start with <code class="text-primary-fixed">sk-</code></span>
+                </div>
+                <div id="key-error" class="mt-2 text-[12px] text-error hidden flex items-start gap-1">
+                    <span class="material-symbols-outlined text-[14px] mt-0.5">error</span>
+                    <span id="key-error-text"></span>
+                </div>
+            </div>
+
+            <!-- ── Step 3: PDF Upload ── -->
+            <div>
+                <label class="flex items-center gap-2 font-label-caps text-[12px] text-on-surface-variant tracking-widest mb-3">
+                    <span class="material-symbols-outlined text-[16px]">description</span>
+                    STEP 3 — UPLOAD PATIENT CASE REPORT (PDF)
+                </label>
+
+                <div id="drop-area"
+                     class="drop-zone border-2 border-dashed border-outline-variant/50 rounded-xl p-10 text-center cursor-pointer hover:border-primary-container/50 transition-colors">
+                    <input type="file" name="case_report" id="fileElem" accept="application/pdf" class="hidden" onchange="handleFiles(this.files)">
+                    <label class="cursor-pointer block" for="fileElem">
+                        <span class="material-symbols-outlined text-[44px] text-on-surface-variant mb-3 block">cloud_upload</span>
+                        <p class="font-h3 text-[18px] text-on-surface mb-1">Drag &amp; Drop PDF</p>
+                        <p class="text-on-surface-variant text-[14px]">or click to browse from your computer</p>
+                    </label>
+                    <div id="file-name"
+                         class="hidden mt-4 font-label-caps text-primary-fixed bg-surface-container-high/50 px-4 py-2 rounded-lg border border-primary-container/20 flex items-center justify-center gap-2">
+                        <span class="material-symbols-outlined text-[16px]">picture_as_pdf</span>
+                        <span id="file-name-text"></span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ── Submit ── -->
+            <button type="submit" id="submit-btn"
+                    class="w-full bg-primary-container hover:bg-primary-fixed text-on-primary-container font-h3 text-[18px] font-bold py-4 rounded-xl transition-all duration-300 shadow-[0_0_20px_rgba(0,240,255,.3)] hover:shadow-[0_0_35px_rgba(0,240,255,.55)] flex items-center justify-center gap-3 group relative overflow-hidden disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:shadow-none"
+                    disabled>
+                <div class="absolute inset-0 bg-white/15 translate-y-full group-hover:translate-y-0 transition-transform duration-300 pointer-events-none"></div>
+                <span class="relative z-10 uppercase tracking-wider">Generate Questions</span>
+                <span class="material-symbols-outlined relative z-10 group-hover:translate-x-1 transition-transform">rocket_launch</span>
+            </button>
+
+        </form>
+
+        <!-- Footer note -->
+        <p class="text-center text-on-surface-variant text-[12px]">
+            Your API key is sent directly to the AI provider and never stored on any server.
+        </p>
+    </div>
+</main>
+
+<script>
+    /* ── State ── */
+    let currentProvider = 'openai';
+    let fileSelected = false;
+
+    const hints = {
+        openai: 'OpenAI keys start with <code class="text-primary-fixed">sk-</code>',
+        gemini: 'Gemini keys start with <code class="text-primary-fixed">AIza</code>',
+    };
+
+    /* ── Provider selection ── */
+    function selectProvider(p) {
+        currentProvider = p;
+        document.getElementById('provider-input').value = p;
+        document.getElementById('key-hint-text').innerHTML = hints[p];
+        document.getElementById('key-error').classList.add('hidden');
+
+        ['openai','gemini'].forEach(id => {
+            const tab = document.getElementById(`tab-${id}`);
+            tab.classList.toggle('active', id === p);
+        });
+        checkReady();
+    }
+
+    /* ── Validation ── */
+    function checkReady() {
+        const key = document.getElementById('api-key-input').value.trim();
+        const errEl = document.getElementById('key-error');
+        const errTxt = document.getElementById('key-error-text');
+
+        let keyValid = key.length > 8;  // minimal check
+        if (key.length > 0) {
+            if (currentProvider === 'openai' && !key.startsWith('sk-')) {
+                errTxt.textContent = 'OpenAI keys must start with sk-';
+                errEl.classList.remove('hidden');
+                keyValid = false;
+            } else if (currentProvider === 'gemini' && !key.startsWith('AIza')) {
+                errTxt.textContent = 'Gemini keys must start with AIza';
+                errEl.classList.remove('hidden');
+                keyValid = false;
+            } else {
+                errEl.classList.add('hidden');
+            }
+        } else {
+            errEl.classList.add('hidden');
+        }
+
+        document.getElementById('submit-btn').disabled = !(keyValid && fileSelected);
+    }
+
+    /* ── Key visibility toggle ── */
+    function toggleKey() {
+        const input = document.getElementById('api-key-input');
+        const icon  = document.getElementById('key-eye-icon');
+        if (input.type === 'password') {
+            input.type = 'text';
+            icon.textContent = 'visibility_off';
+        } else {
+            input.type = 'password';
+            icon.textContent = 'visibility';
+        }
+    }
+
+    /* ── Drag & Drop ── */
+    const dropArea = document.getElementById('drop-area');
+    const fileElem = document.getElementById('fileElem');
+
+    ['dragenter','dragover','dragleave','drop'].forEach(e => {
+        dropArea.addEventListener(e, ev => { ev.preventDefault(); ev.stopPropagation(); });
+    });
+    ['dragenter','dragover'].forEach(e => dropArea.addEventListener(e, () => dropArea.classList.add('dragover')));
+    ['dragleave','drop'].forEach(e    => dropArea.addEventListener(e, () => dropArea.classList.remove('dragover')));
+
+    dropArea.addEventListener('drop', e => {
+        fileElem.files = e.dataTransfer.files;
+        handleFiles(e.dataTransfer.files);
+    });
+
+    function handleFiles(files) {
+        if (!files.length) return;
+        const file = files[0];
+        if (file.type !== 'application/pdf') {
+            alert('Please upload a PDF file.');
+            return;
+        }
+        fileSelected = true;
+        document.getElementById('file-name-text').textContent = file.name;
+        document.getElementById('file-name').classList.remove('hidden');
+        checkReady();
+    }
+
+    /* ── Loading overlay on submit ── */
+    document.getElementById('upload-form').addEventListener('submit', () => {
+        document.getElementById('processing-overlay').classList.add('visible');
+    });
+</script>
+</body>
+</html>

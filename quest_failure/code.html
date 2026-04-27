@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Critical Error - Mission Failed</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700;900&amp;family=Inter:wght@400;500;600&amp;family=Lexend:wght@400;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-primary": "#00363a",
+                      "error-container": "#93000a",
+                      "surface-container": "#1b1f2c",
+                      "surface-container-low": "#171b28",
+                      "inverse-primary": "#006970",
+                      "on-secondary-fixed": "#00210c",
+                      "surface-container-lowest": "#0a0e1a",
+                      "tertiary-fixed": "#e9ddff",
+                      "outline": "#849495",
+                      "error": "#ffb4ab",
+                      "secondary": "#f5fff2",
+                      "primary-container": "#00f0ff",
+                      "on-primary-fixed": "#002022",
+                      "background": "#0f131f",
+                      "on-tertiary-fixed-variant": "#5700c9",
+                      "tertiary": "#faf3ff",
+                      "inverse-on-surface": "#2c303d",
+                      "surface-dim": "#0f131f",
+                      "on-tertiary-container": "#7213ff",
+                      "inverse-surface": "#dfe2f3",
+                      "primary": "#dbfcff",
+                      "on-secondary-fixed-variant": "#005227",
+                      "on-error": "#690005",
+                      "on-background": "#dfe2f3",
+                      "surface-container-highest": "#313442",
+                      "on-tertiary": "#3c0090",
+                      "surface-bright": "#353946",
+                      "on-primary-container": "#006970",
+                      "secondary-fixed": "#61ff97",
+                      "on-secondary-container": "#007238",
+                      "secondary-fixed-dim": "#00e476",
+                      "surface-container-high": "#262a37",
+                      "primary-fixed-dim": "#00dbe9",
+                      "surface-variant": "#313442",
+                      "on-primary-fixed-variant": "#004f54",
+                      "tertiary-fixed-dim": "#d1bcff",
+                      "on-error-container": "#ffdad6",
+                      "secondary-container": "#36ff8b",
+                      "surface": "#0f131f",
+                      "on-secondary": "#003919",
+                      "surface-tint": "#00dbe9",
+                      "outline-variant": "#3b494b",
+                      "tertiary-container": "#e1d2ff",
+                      "primary-fixed": "#7df4ff",
+                      "on-surface": "#dfe2f3",
+                      "on-tertiary-fixed": "#23005b",
+                      "on-surface-variant": "#b9cacb"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "margin-mobile": "16px",
+                      "margin-desktop": "48px",
+                      "gutter": "24px",
+                      "lg": "40px",
+                      "sm": "12px",
+                      "base": "8px",
+                      "xs": "4px",
+                      "md": "24px",
+                      "xl": "64px"
+              },
+              "fontFamily": {
+                      "body-md": [
+                              "Inter"
+                      ],
+                      "h3": [
+                              "Space Grotesk"
+                      ],
+                      "h2": [
+                              "Space Grotesk"
+                      ],
+                      "label-caps": [
+                              "Lexend"
+                      ],
+                      "body-lg": [
+                              "Inter"
+                      ],
+                      "stat-value": [
+                              "Space Grotesk"
+                      ],
+                      "h1": [
+                              "Space Grotesk"
+                      ]
+              },
+              "fontSize": {
+                      "body-md": [
+                              "16px",
+                              {
+                                      "lineHeight": "1.6",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "h3": [
+                              "24px",
+                              {
+                                      "lineHeight": "1.2",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "h2": [
+                              "32px",
+                              {
+                                      "lineHeight": "1.2",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "label-caps": [
+                              "14px",
+                              {
+                                      "lineHeight": "1",
+                                      "letterSpacing": "0.05em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "body-lg": [
+                              "18px",
+                              {
+                                      "lineHeight": "1.6",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "stat-value": [
+                              "24px",
+                              {
+                                      "lineHeight": "1",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "h1": [
+                              "48px",
+                              {
+                                      "lineHeight": "1.1",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "700"
+                              }
+                      ]
+              }
+            }
+          }
+        }
+    </script>
+<style>
+        @keyframes pulse-intense {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.8; transform: scale(1.05); }
+        }
+        .animate-pulse-intense {
+            animation: pulse-intense 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        @keyframes scanline {
+            0% { transform: translateY(-100%); }
+            100% { transform: translateY(100%); }
+        }
+        .scanline-effect::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 10px;
+            background: linear-gradient(to bottom, transparent, rgba(255, 180, 171, 0.2), transparent);
+            animation: scanline 4s linear infinite;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen flex items-center justify-center p-md overflow-hidden relative">
+<!-- Ambient Background Texture/Image -->
+<div class="absolute inset-0 z-0 opacity-10 bg-cover bg-center" data-alt="dark high tech laboratory environment with blurry glowing server racks and intricate medical machinery in shadow" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAUK1oiS80AYiW8lMEZ5R7F6QyrJ4MJI_AveS1bhaQzptyKKL5L1aMV0S-evh9I63DO8VjpL-DOrgaUAsKNXYnPP1SK1wOrBqHasrNV270U5GcUkzt1Gq3IPXlkcVc0O6xbLZpTQwdS3QjJbv9OatD1lcXXI2aAYzh1OlemCT4SHgSgYBIhW2ZP9FtBw7GvBdhFuSZGl8tbSEaf2SkbS7KIbKtY_2lMhDL_vPZYBahEA0IE6ssv_8rcL7EkVLH_d0s8mRvvGaMz61rs');"></div>
+<div class="absolute inset-0 z-0 bg-background/80 mix-blend-multiply"></div>
+<!-- Main Glassmorphic Failure Panel -->
+<main class="relative z-10 max-w-[600px] w-full flex flex-col items-center text-center p-xl bg-surface-container-low/60 backdrop-blur-xl rounded-xl border border-error/30 shadow-[0_0_80px_rgba(255,180,171,0.1)] overflow-hidden scanline-effect">
+<!-- Core Glow -->
+<div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-error-container/20 blur-[100px] rounded-full pointer-events-none"></div>
+<!-- Warning Icon Area -->
+<div class="relative w-32 h-32 mb-lg flex items-center justify-center rounded-full bg-surface-container/50 border border-error/50 shadow-[0_0_30px_rgba(255,180,171,0.2)] animate-pulse-intense">
+<div class="absolute inset-0 rounded-full border border-error opacity-50 animate-ping" style="animation-duration: 3s;"></div>
+<span class="material-symbols-outlined text-[80px] text-error drop-shadow-[0_0_15px_rgba(255,180,171,0.8)]" style="font-variation-settings: 'FILL' 1;">warning</span>
+</div>
+<!-- Typography Context -->
+<div class="flex flex-col items-center gap-sm mb-xl z-10">
+<span class="font-label-caps text-label-caps text-error tracking-[0.2em] uppercase opacity-80">Simulation Terminated</span>
+<h1 class="font-h1 text-h1 text-error uppercase drop-shadow-[0_0_10px_rgba(255,180,171,0.5)]">Mission Failed</h1>
+<div class="w-16 h-[2px] bg-error/50 my-base"></div>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-md mt-sm">
+                Hemodynamic stability lost. Patient vitals crashed below recoverable thresholds. System failure imminent.
+            </p>
+</div>
+<!-- Action Area -->
+<div class="flex flex-col sm:flex-row gap-md w-full justify-center z-10 mt-md">
+<button class="px-xl py-md rounded-DEFAULT font-label-caps text-label-caps bg-primary text-on-primary uppercase tracking-wider hover:bg-primary-fixed hover:shadow-[0_0_20px_rgba(0,240,255,0.4)] transition-all duration-300 ease-out active:scale-95 flex items-center justify-center gap-sm">
+<span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">replay</span>
+                Retry Mission
+            </button>
+<button class="px-lg py-md rounded-DEFAULT font-label-caps text-label-caps bg-transparent text-on-surface-variant border border-outline-variant/50 hover:bg-surface-container hover:text-on-surface hover:border-outline uppercase tracking-wider transition-all duration-300 active:scale-95 flex items-center justify-center gap-sm">
+<span class="material-symbols-outlined text-[20px]">exit_to_app</span>
+                Abort
+            </button>
+</div>
+<!-- Decorative UI Elements -->
+<div class="absolute top-4 left-4 flex gap-xs">
+<div class="w-2 h-2 bg-error rounded-full animate-pulse"></div>
+<div class="w-2 h-2 bg-error/30 rounded-full"></div>
+<div class="w-2 h-2 bg-error/30 rounded-full"></div>
+</div>
+<div class="absolute bottom-4 right-4 font-label-caps text-[10px] text-outline-variant uppercase tracking-widest opacity-50">
+            ERR_CODE: 4X-VITAL-DROP
+        </div>
+</main>
+</body></html>

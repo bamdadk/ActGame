@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Open-Ended Medical Study Quest</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&amp;family=Inter:wght@400;500;600&amp;family=Lexend:wght@600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-secondary-container": "#007238",
+                        "on-background": "#dfe2f3",
+                        "on-tertiary-fixed-variant": "#5700c9",
+                        "primary-fixed": "#7df4ff",
+                        "on-tertiary": "#3c0090",
+                        "on-primary-fixed": "#002022",
+                        "secondary-fixed": "#61ff97",
+                        "error-container": "#93000a",
+                        "on-tertiary-container": "#7213ff",
+                        "on-primary-fixed-variant": "#004f54",
+                        "tertiary": "#faf3ff",
+                        "surface-container": "#1b1f2c",
+                        "on-tertiary-fixed": "#23005b",
+                        "secondary-container": "#36ff8b",
+                        "on-error": "#690005",
+                        "outline": "#849495",
+                        "primary": "#dbfcff",
+                        "inverse-on-surface": "#2c303d",
+                        "surface-tint": "#00dbe9",
+                        "surface-dim": "#0f131f",
+                        "secondary-fixed-dim": "#00e476",
+                        "error": "#ffb4ab",
+                        "tertiary-container": "#e1d2ff",
+                        "on-secondary": "#003919",
+                        "inverse-primary": "#006970",
+                        "surface-container-high": "#262a37",
+                        "on-secondary-fixed-variant": "#005227",
+                        "surface-container-low": "#171b28",
+                        "surface-container-highest": "#313442",
+                        "tertiary-fixed-dim": "#d1bcff",
+                        "on-secondary-fixed": "#00210c",
+                        "background": "#0f131f",
+                        "primary-container": "#00f0ff",
+                        "surface-bright": "#353946",
+                        "on-error-container": "#ffdad6",
+                        "surface-container-lowest": "#0a0e1a",
+                        "on-primary-container": "#006970",
+                        "surface-variant": "#313442",
+                        "on-surface-variant": "#b9cacb",
+                        "tertiary-fixed": "#e9ddff",
+                        "surface": "#0f131f",
+                        "secondary": "#f5fff2",
+                        "inverse-surface": "#dfe2f3",
+                        "on-surface": "#dfe2f3",
+                        "outline-variant": "#3b494b",
+                        "primary-fixed-dim": "#00dbe9",
+                        "on-primary": "#00363a"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "base": "8px",
+                        "sm": "12px",
+                        "gutter": "24px",
+                        "margin-desktop": "48px",
+                        "lg": "40px",
+                        "xl": "64px",
+                        "margin-mobile": "16px",
+                        "xs": "4px",
+                        "md": "24px"
+                    },
+                    "fontFamily": {
+                        "stat-value": ["Space Grotesk"],
+                        "h3": ["Space Grotesk"],
+                        "body-md": ["Inter"],
+                        "h2": ["Space Grotesk"],
+                        "h1": ["Space Grotesk"],
+                        "body-lg": ["Inter"],
+                        "label-caps": ["Lexend"]
+                    },
+                    "fontSize": {
+                        "stat-value": ["24px", { "lineHeight": "1", "fontWeight": "700" }],
+                        "h3": ["24px", { "lineHeight": "1.2", "fontWeight": "600" }],
+                        "body-md": ["16px", { "lineHeight": "1.6", "fontWeight": "400" }],
+                        "h2": ["32px", { "lineHeight": "1.2", "fontWeight": "700" }],
+                        "h1": ["48px", { "lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "body-lg": ["18px", { "lineHeight": "1.6", "fontWeight": "400" }],
+                        "label-caps": ["14px", { "lineHeight": "1", "letterSpacing": "0.05em", "fontWeight": "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .material-symbols-outlined[data-weight="fill"] {
+            font-variation-settings: 'FILL' 1;
+        }
+        .glass-panel {
+            background: rgba(27, 31, 44, 0.6);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .glass-input {
+            background: rgba(15, 19, 31, 0.8);
+            border: none;
+            border-bottom: 2px solid rgba(132, 148, 149, 0.5);
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+        .glass-input:focus {
+            outline: none;
+            border-bottom-color: #00f0ff;
+            box-shadow: 0 4px 15px -3px rgba(0, 240, 255, 0.2);
+        }
+        .primary-glow {
+            box-shadow: 0 0 15px rgba(0, 240, 255, 0.3);
+        }
+        .progress-pulse {
+            background: linear-gradient(90deg, #dbfcff 0%, #36ff8b 100%);
+        }
+        .bg-grid-pattern {
+            background-image: 
+                linear-gradient(to right, rgba(255,255,255,0.02) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(255,255,255,0.02) 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen flex flex-col font-body-md bg-grid-pattern overflow-x-hidden relative">
+<!-- Top Navigation / Progress Header -->
+<header class="fixed top-0 left-0 w-full z-50 flex flex-col px-6 pt-6 pb-4 bg-slate-950/80 backdrop-blur-xl border-b border-white/10 shadow-[0_4_20px_rgba(0,0,0,0.5)]">
+<div class="flex items-center mb-4 max-w-5xl mx-auto w-full justify-center">
+<div class="text-center">
+<h2 class="font-h3 text-h3 text-on-surface">Neurological Assessment</h2>
+<p class="font-label-caps text-label-caps text-primary-fixed mt-1 opacity-80">MODULE 3 • SCENARIO ALPHA</p>
+</div>
+</div>
+<!-- Progress Bar -->
+<div class="w-full max-w-5xl mx-auto">
+<div class="flex justify-between text-xs font-label-caps text-label-caps text-on-surface-variant mb-2">
+<span>PROGRESS</span>
+<span class="text-primary-container">65%</span>
+</div>
+<div class="w-full bg-surface-container-high h-2 rounded-full overflow-hidden">
+<div class="progress-pulse h-full rounded-full" style="width: 65%;"></div>
+</div>
+</div>
+</header>
+<!-- Main Content Area -->
+<main class="flex-grow flex items-center justify-center pt-32 pb-24 px-4 sm:px-gutter lg:px-margin-desktop relative z-10">
+<div class="max-w-3xl w-full flex flex-col gap-lg">
+<!-- Question Card -->
+<div class="glass-panel rounded-xl p-md sm:p-lg relative overflow-hidden">
+<!-- Decorative neon accent line -->
+<div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary-container to-secondary-container"></div>
+<div class="flex items-start gap-4 mb-6">
+<div class="bg-surface-container-high p-3 rounded-lg flex items-center justify-center border border-white/5">
+<span class="material-symbols-outlined text-secondary-container" data-weight="fill">neurology</span>
+</div>
+<div>
+<h1 class="font-h2 text-h2 text-on-surface mb-2">Diagnostic Synthesis</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant">
+                            Based on the preceding MRI scans and the patient's reported symptoms of intermittent aphasia and right-sided motor weakness, detail your differential diagnosis. Justify your reasoning using the provided neuro-imaging markers.
+                        </p>
+</div>
+</div>
+<!-- Input Area -->
+<div class="mt-8 relative group">
+<label class="sr-only" for="analysis-input">Your Analysis</label>
+<textarea class="glass-input w-full rounded-lg p-4 font-body-md text-body-md text-on-surface placeholder-on-surface-variant/50 resize-y min-h-[200px]" id="analysis-input" placeholder="Begin typing your clinical analysis here..." rows="8"></textarea>
+<!-- Decorative corner accents for the input area to feel "techy" -->
+<div class="absolute top-0 left-0 w-2 h-2 border-t border-l border-primary-container opacity-50 pointer-events-none"></div>
+<div class="absolute top-0 right-0 w-2 h-2 border-t border-r border-primary-container opacity-50 pointer-events-none"></div>
+<div class="flex justify-between items-center mt-3 px-2">
+<div class="flex items-center gap-2 text-on-surface-variant font-label-caps text-label-caps opacity-70">
+<span class="material-symbols-outlined text-[16px]">info</span>
+<span>MINIMUM 50 WORDS</span>
+</div>
+<span class="font-stat-value text-[14px] text-primary-fixed">0 WORDS</span>
+</div>
+</div>
+</div>
+<!-- Action Button -->
+<div class="flex justify-end mt-4">
+<button class="bg-primary-container text-on-primary-container font-h3 text-[18px] py-4 px-8 rounded-lg flex items-center gap-3 transition-transform active:scale-95 primary-glow hover:bg-primary-fixed">
+<span>SUBMIT ANALYSIS</span>
+<span class="material-symbols-outlined">send</span>
+</button>
+</div>
+</div>
+</main>
+<!-- Background decorative elements to enhance the "arena/lab" feel -->
+<div class="fixed top-[20%] left-[-10%] w-[40%] h-[40%] rounded-full bg-primary-container opacity-[0.03] blur-[100px] pointer-events-none z-0"></div>
+<div class="fixed bottom-[-10%] right-[-5%] w-[30%] h-[50%] rounded-full bg-secondary-container opacity-[0.02] blur-[120px] pointer-events-none z-0"></div>
+</body></html>
